@@ -29,7 +29,8 @@ APPEND_SLASH = True
 
 ALLOWED_HOSTS = [
     "localhost",
-    "SaiyanSaiCapstone.us-south.cf.appdomain.cloud"
+    "SaiyanSaiCapstone.us-south.cf.appdomain.cloud",
+    "127.0.0.1"
 
 ]
 
