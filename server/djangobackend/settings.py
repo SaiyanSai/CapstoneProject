@@ -27,7 +27,11 @@ DEBUG = True
 
 APPEND_SLASH = True
 
-ALLOWED_HOSTS = ["localhost"]
+ALLOWED_HOSTS = [
+    "localhost",
+    "SaiyanSaiCapstone.us-south.cf.appdomain.cloud"
+
+]
 
 
 # Application definition
