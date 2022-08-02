@@ -66,3 +66,19 @@ class CarDealer:
     def __str__(self):
         return "Dealer name: " + self.full_name
 # <HINT> Create a plain Python class `DealerReview` to hold review data
+class DealerReview:
+
+    def __init__(self, dealership, name, purchase, review ,id ,car_year, purchase_date,sentiment="False",car_make="car",car_model="carmodels"):
+        self.dealership = dealership
+        self.name = name
+        self.purchase = purchase
+        self.review = review
+        self.purchase_date = purchase_date
+        self.car_make = car_make
+        self.car_model = car_model
+        self.car_year = car_year
+        self.id = id
+        self.sentiment = sentiment
+    
+    def ___str___(self):
+        return "car_make" + self.car_make               
