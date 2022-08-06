@@ -101,7 +101,7 @@ def get_dealerships(request):
 def get_dealer_details(request, dealer_id):
     kw ={}
     url = "https://e8cae35e.us-south.apigw.appdomain.cloud/api/review"
-    kw["dealership"]=dealer_id
+    kw["dl"]=dealer_id
     ky = json.dumps(kw)
     ks = json.loads(ky)
     reviews = get_dealer_reviews_from_cf(url, **ks)
