@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from datetime import datetime
-from .restapis import get_dealers_from_cf, get_dealer_reviews_from_cf
+from .restapis import get_dealers_from_cf, get_dealer_reviews_from_cf, post_request
 import logging
 import json
 
@@ -105,9 +105,30 @@ def get_dealer_details(request, dealer_id):
     ky = json.dumps(kw)
     ks = json.loads(ky)
     reviews = get_dealer_reviews_from_cf(url, **ks)
-    review_list = ' //t'.join([areview.review for areview in reviews])
+    review_list = ' //t'.join([areview.sentiment for areview in reviews])
     return HttpResponse(review_list)
 # Create a `add_review` view to submit a review
 # def add_review(request, dealer_id):
 # ...
+
+def add_review(request, dealer_id):
+    review = dict()
+    json_payload = dict()
+    url = "https://e8cae35e.us-south.apigw.appdomain.cloud/api/review"
+    if(request.user.is_authenticated):
+        review["id"] = "1000000"
+        review["name"] = "test"
+        review["dealership"] = dealer_id
+        review["review"] = "test REVIEW NOT FROM POST FORM"
+        review["purchase"]= False
+        review["another"] = "Test Field"
+        review["purchase_date"] = "25-10-2001"
+        review["car_make"] = "Test_carmake"
+        review["car_model"] = "TEST_Car_model"
+        review["car_year"] = 2022
+        json_payload["review"] = review
+        post_request(url, json_payload)
+        return HttpResponse("REVIEW BEING ADDED")
+    else:
+        return HttpResponse("Not Authenticated")
 
