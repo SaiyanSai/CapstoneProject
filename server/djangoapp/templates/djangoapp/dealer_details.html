@@ -10,9 +10,60 @@
     <body>
 
     <!--Add a nav bar here -->
-
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                  <a class="navbar-brand" href="{% url 'djangoapp:index' %}">Dealership Review</a>
+            </div>
+                <a class="btn btn-outline-danger" href="{% url 'djangoapp:aboutus' %}">about us </a>
+                <a class="btn btn-outline-danger" href="{% url 'djangoapp:contactus' %}">contact us </a>
+            <ul class="nav navbar-nav navbar-right">
+                {% if user.is_authenticated %}
+                <li>
+                    <a class="btn btn-link" href="#">{{ user.first_name }}({{ user.username }})</a>
+                    <a class="btn btn-link" href="{% url 'djangoapp:logout' %}">Logout</a>
+                    <a class="btn btn-link" href="{% url 'djangoapp:review' %}">Add Review</a>
+                </li>
+                {% else %}
+                <li>
+                    <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Username" name="username" >
+                            <input type="password" class="form-control" placeholder="Password" name="psw" >
+                            <button class="btn btn-primary" type="submit">Login</button>
+                            <a class="btn btn-link" href="{% url 'djangoapp:register' %}">Sign Up</a>
+                        </div>
+                    </form>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
     <!-- Add reviews as cards -->
-
+    <div class ="card-columns">
+        {% for review in reviews %}
+                {% if review.sentiment == "positive"%}
+                <div class = "card border-success mb-3" style="width: 18rem;" >
+                    <img class = "card-img-left" src = "{{MEDIA_URL}}/emoji/positive.png" width = "50" height = "50">
+                    <div class = "card-header border-success mb-3 card-title font-weight-bold">{{review.car_make}}, {{review.car_model}}, {{review.car_year}}</div>
+                    <div class = "card-body">{{review.review}}</div>
+                </div>
+                
+                {% elif review.sentiment == "neutral" %}
+                <div class = "card border-warning mb-3" style="width: 18rem;" >
+                    <img class = "card-img-left" src = "{{MEDIA_URL}}/emoji/neutral.png" width = "50" height = "50">
+                    <div class = "card-header border-warning mb-3 card-title font-weight-bold">{{review.car_make}}, {{review.car_model}}, {{review.car_year}}</div>
+                    <div class = "card-body">{{review.review}}</div>
+                </div>
+                {% elif review.sentiment == "negative" %}
+                <div class = "card border-danger mb-3" style="width: 18rem;" >
+                    <img class = "card-img-left" src = "{{MEDIA_URL}}/emoji/negative.png" width = "50" height = "50">
+                    <div class = "card-header border-danger mb-3 card-title font-weight-bold">{{review.car_make}}, {{review.car_model}}, {{review.car_year}}</div>
+                    <div class = "card-body">{{review.review}}</div>
+                </div>
+                {%endif%} 
+        {%endfor%}
     </body>
 
 </html>
