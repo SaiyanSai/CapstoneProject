@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from datetime import datetime
+from .models import CarModel
 from .restapis import get_dealers_from_cf, get_dealer_reviews_from_cf, post_request
 import logging
 import json
@@ -110,6 +111,7 @@ def get_dealer_details(request, dealer_id):
     ks = json.loads(ky)   # i used those to test my code and i am too afraid to delete them now 
     reviews = get_dealer_reviews_from_cf(url, **ks)
     context["reviews"] = reviews
+    context["dealer_id"] = dealer_id
     #review_list = ' //t'.join([areview.sentiment for areview in reviews])
     return render(request, 'djangoapp/dealer_details.html', context)
 # Create a `add_review` view to submit a review
@@ -117,23 +119,38 @@ def get_dealer_details(request, dealer_id):
 # ...
 
 def add_review(request, dealer_id):
-    review = dict()
-    json_payload = dict()
-    url = "https://e8cae35e.us-south.apigw.appdomain.cloud/api/review"
-    if(request.user.is_authenticated):
-        review["id"] = "1000000"
-        review["name"] = "test"
-        review["dealership"] = dealer_id
-        review["review"] = "test REVIEW NOT FROM POST FORM"
-        review["purchase"]= False
-        review["another"] = "Test Field"
-        review["purchase_date"] = "25-10-2001"
-        review["car_make"] = "Test_carmake"
-        review["car_model"] = "TEST_Car_model"
-        review["car_year"] = 2022
-        json_payload["review"] = review
-        post_request(url, json_payload)
-        return HttpResponse("REVIEW BEING ADDED")
-    else:
-        return HttpResponse("Not Authenticated")
+    context={}
+    ks={}
+    ks["id"] = dealer_id
+    cars = []
+    url = "https://e8cae35e.us-south.apigw.appdomain.cloud/api/dealership"
+    dealer = get_dealers_from_cf(url, **ks)
+    cars = CarModel.objects.filter(dealerid = dealer_id)
+    print(cars)
+    context["cars"] = cars
+    context["dealer"] = dealer[0]
+    context["dealer_id"] = dealer_id
+
+    if(request.method == "GET"):
+        return render(request, 'djangoapp/add_review.html', context)
+    if (request.method == "POST"):    
+        review = dict()
+        json_payload = dict()
+        url = "https://e8cae35e.us-south.apigw.appdomain.cloud/api/review"
+        if(request.user.is_authenticated):
+            review["id"] = "1000000"
+            review["name"] = "test"
+            review["dealership"] = dealer_id
+            review["review"] = "test REVIEW NOT FROM POST FORM"
+            review["purchase"]= False
+            review["another"] = "Test Field"
+            review["purchase_date"] = "25-10-2001"
+            review["car_make"] = "Test_carmake"
+            review["car_model"] = "TEST_Car_model"
+            review["car_year"] = 2022
+            json_payload["review"] = review
+            post_request(url, json_payload)
+            return HttpResponse("REVIEW BEING ADDED")
+        else:
+            return HttpResponse("Not Authenticated")
 
