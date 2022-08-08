@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.urls import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
@@ -156,7 +157,7 @@ def add_review(request, dealer_id):
             review["car_year"] = car.dateofmake.year
             json_payload["review"] = review
             post_request(url, json_payload)
-            return HttpResponse("REVIEW BEING ADDED")
+            return HttpResponseRedirect(reverse('djangoapp:index'))
         else:
             return HttpResponse("Not Authenticated")
 
