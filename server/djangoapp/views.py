@@ -127,6 +127,8 @@ def add_review(request, dealer_id):
     dealer = get_dealers_from_cf(url, **ks)
     cars = CarModel.objects.filter(dealerid = dealer_id)
     print(cars)
+    user = request.user
+    print (user)
     context["cars"] = cars
     context["dealer"] = dealer[0]
     context["dealer_id"] = dealer_id
@@ -138,16 +140,20 @@ def add_review(request, dealer_id):
         json_payload = dict()
         url = "https://e8cae35e.us-south.apigw.appdomain.cloud/api/review"
         if(request.user.is_authenticated):
-            review["id"] = "1000000"
-            review["name"] = "test"
+            review["id"] =request.POST['car']
+            car = get_object_or_404(CarModel, pk=review["id"])
+            review["name"] = user.username
             review["dealership"] = dealer_id
-            review["review"] = "test REVIEW NOT FROM POST FORM"
-            review["purchase"]= False
-            review["another"] = "Test Field"
-            review["purchase_date"] = "25-10-2001"
-            review["car_make"] = "Test_carmake"
-            review["car_model"] = "TEST_Car_model"
-            review["car_year"] = 2022
+            review["review"] = request.POST['content']
+            review["purchase"]= request.POST['purchasecheck']
+            review["another"] = "another Field"
+            review["purchase_date"] = request.POST['dateofpurchase']
+            print(car.carmake.name)
+            print(car.name)
+            print(car.dateofmake.year)
+            review["car_make"] = car.carmake.name
+            review["car_model"] = car.name
+            review["car_year"] = car.dateofmake.year
             json_payload["review"] = review
             post_request(url, json_payload)
             return HttpResponse("REVIEW BEING ADDED")

@@ -47,21 +47,21 @@
         <div class="container"> <!--Style root div with .container class -->
             {% csrf_token %}
             <h1>Add Review for {{cars.id}}{{dealer.full_name}}</h1>
-            {% for car in cars %}
-            <h5> {{car.id}} </h5>
-            {%endfor%}
             <hr>
             <div class="form-group"> <!--Style second div with .form-group class -->
                 <label for="review content"><b>Enter the review content:</b></label>
                 <textarea class="form-control" id="content" name="content" rows="2" required></textarea> <!--Style input with .form-control class -->
-                <label for="purchase check"><b>Has purchased the car from{{dealer.full_name}} ? </b></label>
-                <input class="form-check-input" type="checkbox" name="purchasecheck" id="purchasecheck"> <!--Style input with .form-control class -->
+                <label for="purchase check"><b>Has purchased the car from{{dealer.full_name}} ?</b></label></br>
+                <input class="form-check-input" type="checkbox" name="purchasecheck" id="purchasecheck"></br> <!--Style input with .form-control class -->
+                <label for="purchase check"><b>Select Your Car (model-make-year) </b></label>
                 <select name="car" id="car" class="form-select" required>
                     {% for car in cars %}
-                        <option selected value={{car.id}}>{{car.name}}-{{car.carmake.name}}-{{ car.year|date:"Y" }}</option>
+                        <option selected value={{car.id}}>{{car.name}}-{{car.carmake.name}}-{{ car.dateofmake|date:"Y" }}</option>
                     {% endfor %}
                </select>
-                <button class="btn btn-primary" type="submit">Sign up</button> <!--Style button with .btn and .btn-primary class -->
+               <label for="purchase Date"><b>Select your Purchase Date</b></label></br>
+               <input class = "form-control" type="date" id="dateofpurchase" name="dateofpurchase">
+               <button class="btn btn-primary" type="submit">Submit Review</button> <!--Style button with .btn and .btn-primary class -->
             </div>
         </div>
     </form>

@@ -36,6 +36,7 @@ class CarModel(models.Model):
         (WAGON, 'Wagon')
     ]
     type = models.CharField(null=False, max_length=20, choices=type_choices, default=SEDAN)
+    dateofmake = models.DateField(null = False)
     def ___str___(self):
         return (self.name + "," + self.dealerid + "," + self.carmake + "," + self.type)
 
