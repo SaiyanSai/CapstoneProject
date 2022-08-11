@@ -22,13 +22,14 @@
     <!-- Remove this line the first time you edit this file -->
 
     <!--Add a nav bar here -->
-    <nav class="navbar navbar-dark bg-dark">
+    <nav class="navbar sticky-top navbar-dark bg-dark">
         <div class="container-fluid">
             <div class="navbar-header">
                   <a class="navbar-brand" href="{% url 'djangoapp:index' %}">Dealership Review</a>
+                    <a class="btn btn-outline-danger" href="{% url 'djangoapp:aboutus' %}">about us </a>
+                    <a class="btn btn-outline-danger" href="{% url 'djangoapp:contactus' %}">contact us </a>
             </div>
-                <a class="btn btn-outline-danger" href="{% url 'djangoapp:aboutus' %}">about us </a>
-                <a class="btn btn-outline-danger" href="{% url 'djangoapp:contactus' %}">contact us </a>
+
             <ul class="nav navbar-nav navbar-right">
                 {% if user.is_authenticated %}
                 <li>
